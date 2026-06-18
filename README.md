@@ -17,3 +17,18 @@ To implement and analyze this infrastructure, the initial baseline data was stru
   The application layer centralizes all this information into a customized web dashboard, allowing operators to monitor the current status of network equipment and send secure commands back to the field.
 
 
+- Local Network Architecture
+  
+<img width="1458" height="581" alt="image" src="https://github.com/user-attachments/assets/c956ab97-e4ed-415c-ad90-923e41ffca38" />
+
+- Cloud Architecture
+
+<img width="1459" height="754" alt="image" src="https://github.com/user-attachments/assets/06fd2328-3473-4075-84ac-48668cdaab5e" />
+
+- NoSQL Database
+
+<img width="1460" height="791" alt="image" src="https://github.com/user-attachments/assets/5d353e7a-33e5-42da-85ff-2933db71979c" />
+
+- AI Training
+
+<img width="1408" height="698" alt="image" src="https://github.com/user-attachments/assets/58b9d4e4-7a43-4961-ae82-a5e0421df918" />
