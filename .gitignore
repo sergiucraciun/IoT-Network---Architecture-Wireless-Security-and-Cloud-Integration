@@ -1,0 +1,17 @@
+# Blochează absolut tot ce se află în folder
+*
+
+# Permite explicit fișierul .gitignore în sine
+!.gitignore
+
+# Permite doar cele 4 foldere 
+!AI_Training/
+!Dashboard/
+!esp32_dht22/
+!RaspberryPi/
+
+# Ignoră fișierele temporare grele din interiorul folderelor permise
+.pio/
+.vscode/
+venv/
+__pycache__/
