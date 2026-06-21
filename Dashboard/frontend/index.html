@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>IOT Dashboard</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <div class="grid-container">
+
+    <header class="header">
+      <div class="menu-icon" onclick="openSidebar()">
+        <span class="material-icons-outlined">menu</span>
+      </div>
+      <div class="header-left">
+        <span class="material-icons-outlined">search</span>
+      </div>
+      <div class="header-right">
+        <span class="material-icons-outlined">notifications</span>
+        <span class="material-icons-outlined">email</span>
+        <span class="material-icons-outlined">account_circle</span>
+      </div>
+    </header>
+    <aside id="sidebar">
+      <div class="sidebar-title">
+        <div class="sidebar-brand">
+          <span class="material-symbols-outlined">nest_remote_comfort_sensor</span> IOT Dashboard
+        </div>
+        <span class="material-icons-outlined" onclick="closeSidebar()">close</span>
+      </div>
+
+      <ul class="sidebar-list">
+
+        <li class="sidebar-list-item">
+          <a href="#" id="monitor-link">
+            <span class="material-symbols-outlined">dashboard_2</span> Monitor
+          </a>
+        </li>
+
+        <li class="sidebar-list-item">
+          <a href="#" id="sensors-link">
+            <span class="material-symbols-outlined">home_iot_device</span> Sensors
+          </a>
+        </li>
+
+        <li class="sidebar-list-item">
+          <a href="#" id="configure-link">
+            <span class="material-symbols-outlined">settings</span> Configure
+          </a>
+        </li>
+
+        <li class="sidebar-list-item">
+          <a href="#" id="alerts-link">
+            <span class="material-symbols-outlined">notifications_active</span> Alerts
+          </a>
+        </li>
+
+      </ul>
+    </aside>
+    <main class="main-container">
+      </main>
+    </div>
+
+
+  <template id="monitor-template">
+    <div class="main-title">
+      <h2>Monitor</h2>
+      <div class="sensor-selector">
+        <label for="monitor-sensor-select">Select Sensor:</label>
+        <select id="monitor-sensor-select">
+          <option value="">-- Choose a sensor --</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="main-cards">
+      <div class="card">
+        <div class="card-inner">
+          <h3>Temperature °C and Humidity % </h3>
+          <span class="material-icons-outlined">thermostat</span>
+        </div>
+        <h1>waiting for data...</h1>
+      </div>
+    </div>
+
+    <div class="main-cards">
+      <div class="card">
+        <div id="chart"></div>
+      </div>
+    </div>
+  </template>
+  <template id="sensors-template">
+    <div class="main-title">
+      <h2>Device Registry</h2>
+    </div>
+
+    <div class="main-cards">
+      <div class="card">
+        <div class="card-inner">
+          <h3>Register New Device</h3>
+          <span class="material-icons-outlined">add_circle</span>
+        </div>
+        <form id="register-device-form" class="configure-form">
+          <div class="form-row">
+            
+            <div class="form-control">
+              <label for="device-id">Device ID</label>
+              <input type="text" id="device-id" name="deviceId" placeholder="e.g., sensor-1" required>
+              <small style="color: rgba(255,255,255,0.5); font-size: 10px;">Unique ID</small>
+            </div>
+
+            <div class="form-control">
+              <label for="device-name">Friendly Name</label>
+              <input type="text" id="device-name" name="deviceName" placeholder="e.g., Living Room" required>
+            </div>
+
+            <div class="form-control">
+              <label for="device-location">Location & Description</label>
+              <input type="text" id="device-location" name="deviceLocation" placeholder="e.g., North Wall" required>
+            </div>
+
+            <div class="form-control">
+              <label for="device-type">Device Type</label>
+              <select id="device-type" name="deviceType" required style="background-color: #1d2634; color: #fff; border: 1px solid #555; padding: 10px; border-radius: 5px; width: 100%;">
+                <option value="sensor">Sensor (ESP32)</option>
+                <option value="gateway">Gateway (Raspberry Pi)</option>
+              </select>
+            </div>
+
+          </div>
+
+          <button type="button" class="btn btn-primary" id="register-device-btn" style="margin-top: 10px;">Register Device</button>
+          <p id="register-device-status" class="form-status" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </div>
+
+    <div class="main-cards">
+      <div class="card">
+        <div class="card-inner">
+          <h3>Registered Devices</h3>
+          <span class="material-icons-outlined">devices</span>
+        </div>
+        <div id="registered-devices-list" class="registered-devices-list"></div>
+      </div>
+    </div>
+  </template>
+  <template id="configure-template">
+    <div class="main-title">
+      <h2>Configure</h2>
+    </div>
+
+    <div class="main-cards">
+      <div class="card">
+        <div class="card-inner">
+          <h3>Remote Control-Pannel</h3>
+          <span class="material-icons-outlined">settings</span>
+        </div>
+        <form id="sensor-config-form" class="configure-form">
+          <div class="form-control">
+            <label for="sensor-name">Select Sensor</label>
+            <select id="sensor-name" name="sensorName" required>
+                 <option value="">-- Loading Sensors... --</option>
+            </select>
+          </div>
+
+          <button type="button" class="btn btn-danger" style="margin-top: 15px;">Activate command</button>
+          <p id="sensor-config-status" class="form-status" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </div>
+
+    <div class="main-cards">
+      <div class="card">
+        <div class="card-inner">
+          <h3>Automated Processes</h3>
+          <span class="material-icons-outlined">rule</span>
+        </div>
+        <form id="condition-form" class="configure-form">
+          <div class="form-row">
+            <div class="form-control">
+              <label for="condition-sensor-name">Sensor Name</label>
+              <select id="condition-sensor-name" name="conditionSensorName" required>
+                 <option value="">-- Loading Sensors... --</option>
+              </select>
+            </div>
+            
+            <div class="form-control">
+              <label for="condition-type">Select</label>
+              <select id="condition-type" name="conditionType" required>
+                <option value="">-- Select --</option>
+                <option value="temperature">Temperature</option>
+                <option value="humidity">Humidity</option>
+              </select>
+            </div>
+
+            <div class="form-control">
+              <label for="condition-operator">Operator</label>
+              <select id="condition-operator" name="conditionOperator" required>
+                <option value="">-- Select --</option>
+                <option value=">">Greater than (&gt;)</option>
+                <option value=">=">Greater or equal (&gt;=)</option>
+                <option value="<">Less than (&lt;)</option>
+                <option value="<=">Less or equal (&lt;=)</option>
+                <option value="==">"Equal (==)</option>
+              </select>
+            </div>
+
+            <div class="form-control">
+              <label for="condition-value">Value</label>
+              <input type="number" id="condition-value" name="conditionValue" placeholder="Value" required min="-50" max="100">
+            </div>
+          </div>
+
+          <button type="button" class="btn btn-primary" id="save-condition-btn">Save Condition</button>
+          <p id="condition-form-status" class="form-status" role="status" aria-live="polite"></p>
+        </form>
+
+        <div id="active-conditions-list" class="active-conditions-list"></div>
+      </div>
+    </div>
+  </template>
+
+  <template id="alerts-template">
+    <div class="main-title">
+      <h2>Alerts</h2>
+    </div>
+
+    <div class="main-cards">
+      <div class="card">
+        <div id="alerts-feed" class="alerts-feed">
+          <!-- Alerts will be populated here -->
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <script src="scripts.js"></script>
+
+</body>
+</html>
